@@ -27,13 +27,15 @@ object MinioUtil {
     }
 
     fun upload(file: MultipartFile, bucketName: String = "public"): String {
-        return uploadWithSize(file.originalFilename, bucketName, file.contentType, file.size, file.inputStream)
+        return uploadWithSize(bucketName, file.originalFilename, file.contentType, file.size, file.inputStream)
     }
 
-    fun upload(bucketName: String = "public",
-               fileName: String,
-               contentType: String,
-               inputStream: InputStream): String {
+    fun upload(
+        bucketName: String = "public",
+        fileName: String,
+        contentType: String,
+        inputStream: InputStream
+    ): String {
         return uploadWithSize(fileName, bucketName, contentType, 67108864, inputStream)
     }
 
@@ -48,7 +50,7 @@ object MinioUtil {
         inputStream.use {
             MinioCfg.client.putObject(
                 PutObjectArgs.builder()
-                    .bucket(bucketName).`object`(name)
+                    .bucket("bot").`object`(name)
                     .stream(inputStream, size, -1)
                     .contentType(contentType)
                     .build()

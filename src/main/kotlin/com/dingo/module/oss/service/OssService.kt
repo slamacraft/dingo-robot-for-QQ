@@ -15,7 +15,8 @@ open class OssService {
     @Transactional
     open fun get(id: Long): OssEntity = OssTable.getById(id) ?: throw RuntimeException("oss不存在")
 
-    fun upload(file: MultipartFile, bucketName: String): OssEntity {
+    @Transactional
+    open fun upload(file: MultipartFile, bucketName: String): OssEntity {
         val fileUrl = MinioUtil.upload(file, bucketName)
         return OssTable.insert(OssEntity {
             name = file.originalFilename

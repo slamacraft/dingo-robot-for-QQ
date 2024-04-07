@@ -27,7 +27,7 @@ spring:
   # ----------------- mysql ------------------
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_HOST:192.168.110.223:3306}/${DATABASE:bot_dev}?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://${DB_HOST:192.168.110.206:3306}/${DATABASE:bot_dev}?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
     username: ${DB_USERNAME:slamacraft}
     password: ${DB_PASSWORD:13574159100Q}
     filters: stat,wall,log4j

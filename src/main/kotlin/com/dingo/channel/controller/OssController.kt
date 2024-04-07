@@ -16,12 +16,11 @@ open class OssController {
     @GetMapping("/{id}")
     open fun get(@PathVariable id: Long): OssEntity = ossService.get(id)
 
-    @PutMapping("/upload")
+    @PostMapping("/upload")
     open fun upload(
-        @RequestPart @RequestParam("file") file: MultipartFile,
-        @RequestParam("bucketName") bucketName: String
-    ): OssEntity = ossService.upload(file, bucketName)
+        @RequestPart @RequestParam("file") file: MultipartFile
+    ): OssEntity = ossService.upload(file, "bot")
 
-    @PutMapping
+    @PostMapping
     open fun add(@RequestBody req: OssAddReq): OssEntity = ossService.add(req)
 }
