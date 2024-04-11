@@ -1,4 +1,4 @@
-package com.dingo.module.stopwatch
+package com.dingo.feature.stopwatch
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

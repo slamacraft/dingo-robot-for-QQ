@@ -4,7 +4,7 @@ import com.dingo.channel.model.OssAddReq
 import com.dingo.module.oss.entity.OssEntity
 import com.dingo.module.oss.entity.OssTable
 import com.dingo.module.oss.entity.OssTable.getById
-import com.dingo.util.MinioUtil
+import com.dingo.common.util.MinioUtil
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile

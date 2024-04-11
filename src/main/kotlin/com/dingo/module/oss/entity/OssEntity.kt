@@ -1,8 +1,8 @@
 package com.dingo.module.oss.entity
 
-import com.dingo.core.module.BaseEntity
-import com.dingo.core.module.BaseTable
-import com.dingo.core.module.Entity
+import com.dingo.module.base.BaseEntity
+import com.dingo.module.base.BaseTable
+import com.dingo.module.base.Entity
 
 interface OssEntity : Entity<OssEntity>, BaseEntity {
     companion object : Entity.Factory<OssEntity>()

@@ -1,4 +1,4 @@
-package com.dingo.module.stopwatch
+package com.dingo.feature.stopwatch
 
 import java.util.*
 import javax.security.auth.DestroyFailedException

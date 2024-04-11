@@ -1,8 +1,8 @@
 @file:Suppress("UNUSED_EXPRESSION")
 
-package com.dingo.core.module
+package com.dingo.module.base
 
-import com.dingo.util.underlineToCamelCase
+import com.dingo.common.util.underlineToCamelCase
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.FieldSet

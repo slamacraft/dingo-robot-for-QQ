@@ -1,4 +1,4 @@
-package com.dingo.util
+package com.dingo.common.util
 
 import java.util.*
 

@@ -1,7 +1,7 @@
-package com.dingo.core.module
+package com.dingo.module.base
 
 import com.dingo.module.oss.entity.OssTable.id
-import com.dingo.util.underlineToCamelCase
+import com.dingo.common.util.underlineToCamelCase
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.transactions.TransactionManager

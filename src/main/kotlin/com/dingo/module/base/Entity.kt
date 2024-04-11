@@ -1,4 +1,4 @@
-package com.dingo.core.module
+package com.dingo.module.base
 
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method

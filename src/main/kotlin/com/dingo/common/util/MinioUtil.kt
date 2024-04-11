@@ -1,4 +1,4 @@
-package com.dingo.util
+package com.dingo.common.util
 
 import cn.hutool.core.net.URLDecoder
 import com.dingo.config.cfg.MinioCfg

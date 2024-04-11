@@ -1,4 +1,4 @@
-package com.dingo.core.module
+package com.dingo.module.base
 
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
