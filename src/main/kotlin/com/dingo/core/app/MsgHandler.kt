@@ -31,7 +31,6 @@ interface GlobalMsgHandler : MsgHandler
  */
 interface ExceptionMsgHandler : MsgHandler {
     override fun handler(msg: MessageChain, subject: Contact, next: MsgHandler) {
-
     }
 
     fun handler(exception: Exception, subject: Contact, next: ExceptionMsgHandler)
