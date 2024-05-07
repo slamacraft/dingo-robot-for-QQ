@@ -1,5 +1,6 @@
 package com.dingo.core.mirai
 
+import com.dingo.core.app.MsgHandlerRouter
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import net.mamoe.mirai.Bot
@@ -30,13 +31,15 @@ object BotInitializer {
         }
         bot.alsoLogin()
         BotInitializer.bot = bot
+        registeredGroupMsgEvent { MsgHandlerRouter.handle(it) }
+        registeredFriendMsgEvent { MsgHandlerRouter.handle(it) }
     }
 
 
     /**
      * 注册群消息事件[GroupMessageEvent]
      */
-    fun registeredGroupMsgEvent(eventMethod: suspend (eventType: GroupMessageEvent) -> Unit) {
+    private fun registeredGroupMsgEvent(eventMethod: suspend (eventType: GroupMessageEvent) -> Unit) {
         GlobalEventChannel.subscribeAlways<GroupMessageEvent> { event ->
             eventMethod(event)
         }
@@ -45,7 +48,7 @@ object BotInitializer {
     /**
      * 注册好友消息事件[FriendMessageEvent]
      */
-    fun registeredFriendMsgEvent(eventMethod: suspend (eventType: FriendMessageEvent) -> Unit) {
+    private fun registeredFriendMsgEvent(eventMethod: suspend (eventType: FriendMessageEvent) -> Unit) {
         GlobalEventChannel.subscribeAlways<FriendMessageEvent> { event ->
             eventMethod(event)
         }
