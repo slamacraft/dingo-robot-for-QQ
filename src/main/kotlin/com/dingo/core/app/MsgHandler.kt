@@ -13,12 +13,11 @@ interface MsgHandler {
      *
      * @return 是否保持当前状态,如果返回false,则退出当前状态
      */
-    fun handler(msg: MessageChain, subject: Contact, next: MsgHandler): Boolean
+    fun handler(msg: MessageChain, subject: Contact, next: MsgHandler)
 }
 
 object DefaultMsgHandler : MsgHandler {
-    override fun handler(msg: MessageChain, subject: Contact, next: MsgHandler): Boolean {
-        return false
+    override fun handler(msg: MessageChain, subject: Contact, next: MsgHandler) {
     }
 }
 
@@ -31,11 +30,11 @@ interface GlobalMsgHandler : MsgHandler
  * 异常消息处理器
  */
 interface ExceptionMsgHandler : MsgHandler {
-    override fun handler(msg: MessageChain, subject: Contact, next: MsgHandler): Boolean {
-        return false
+    override fun handler(msg: MessageChain, subject: Contact, next: MsgHandler) {
+
     }
 
-    fun handler(exception: Exception, subject: Contact, next: ExceptionMsgHandler): Boolean
+    fun handler(exception: Exception, subject: Contact, next: ExceptionMsgHandler)
 }
 
 
@@ -61,8 +60,7 @@ interface StatelessMsgHandler : TriggerMsgHandler {
 
     fun handle(msg: MessageChain, subject: Contact, next: MsgHandler)
 
-    override fun handler(msg: MessageChain, subject: Contact, next: MsgHandler): Boolean {
+    override fun handler(msg: MessageChain, subject: Contact, next: MsgHandler) {
         handle(msg, subject, next)
-        return false
     }
 }

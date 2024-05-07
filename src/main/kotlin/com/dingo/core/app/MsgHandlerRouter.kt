@@ -5,7 +5,7 @@ import net.mamoe.mirai.event.events.MessageEvent
 import net.mamoe.mirai.message.data.MessageChain
 
 object MsgHandlerRouter {
-    // 全局的消息处理器
+    // 全局的消息处理器列表
     private val globalMsgHandlerList = mutableListOf<GlobalMsgHandler>()
 
     // 全局消息处理器链
@@ -34,7 +34,7 @@ object MsgHandlerRouter {
     }
 
     fun handle(messageEvent: MessageEvent) {
-        globalMsgHandlerChain.handler()
+        globalMsgHandlerChain.handler(messageEvent.message, messageEvent.subject)
     }
 }
 
@@ -44,10 +44,10 @@ class MsgHandlerChain<T : MsgHandler>(
 ) : MsgHandler {
 
     fun handler(msg: MessageChain, subject: Contact) {
-
+        handler(msg, subject, next ?: DefaultMsgHandler)
     }
 
-    override fun handler(msg: MessageChain, subject: Contact, next: MsgHandler): Boolean {
-        return current.handler(msg, subject, next)
+    override fun handler(msg: MessageChain, subject: Contact, next: MsgHandler) {
+        current.handler(msg, subject, this.next ?: DefaultMsgHandler)
     }
 }
