@@ -80,7 +80,7 @@ class MsgHandlerChain : MsgHandler {
 
     fun handler(msg: MessageChain, subject: Contact): Boolean {
         var idx = 0
-        return handler(msg, subject) {
+        return handler(msg, subject){
             idx++
             if (idx < handlers.size) {
                 handlers[idx]
@@ -90,6 +90,7 @@ class MsgHandlerChain : MsgHandler {
     }
 
     override fun handler(msg: MessageChain, subject: Contact, next: () -> MsgHandler): Boolean {
+        var idx = 0
         val head = handlers[0]
         return head.handler(msg, subject, next)
     }
