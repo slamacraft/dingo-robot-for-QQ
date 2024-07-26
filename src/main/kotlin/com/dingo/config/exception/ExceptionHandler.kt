@@ -1,4 +1,4 @@
-package com.dingo.config.handler
+package com.dingo.config.exception
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

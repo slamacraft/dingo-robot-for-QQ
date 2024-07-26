@@ -15,14 +15,19 @@ import java.util.*
 
 object MinioUtil {
 
-    fun getUrl(bucketName: String, fileName: String): String {
-        val url = MinioCfg.client.getPresignedObjectUrl(
-            GetPresignedObjectUrlArgs
-                .builder()
-                .bucket(bucketName)
-                .`object`(fileName)
-                .method(Method.GET).build()
-        )
+    fun getUrl(
+        bucketName: String,
+        fileName: String,
+        argsModify: GetPresignedObjectUrlArgs.Builder.() -> Unit = {}
+    ): String {
+        val argsBuilder = GetPresignedObjectUrlArgs
+            .builder()
+            .bucket(bucketName)
+            .`object`(fileName)
+            .method(Method.GET)
+        argsModify(argsBuilder)
+
+        val url = MinioCfg.client.getPresignedObjectUrl(argsBuilder.build())
         return URLDecoder.decode(url, Charset.forName("UTF-8"));
     }
 

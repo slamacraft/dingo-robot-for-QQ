@@ -21,6 +21,9 @@ open class OssController {
         @RequestPart @RequestParam("file") file: MultipartFile
     ): OssEntity = ossService.upload(file, "bot")
 
-    @PostMapping
-    open fun add(@RequestBody req: OssAddReq): OssEntity = ossService.add(req)
+    @GetMapping("/preview/{id}")
+    open fun preview(@PathVariable id: String): String {
+        return ossService.preview(id.toLong())
+    }
+
 }
