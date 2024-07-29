@@ -4,6 +4,7 @@ import com.dingo.module.oss.entity.OssTable.id
 import com.dingo.common.util.underlineToCamelCase
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.statements.InsertStatement
+import org.jetbrains.exposed.sql.statements.UpdateStatement
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 
 open class EntityInsertStatement(
@@ -11,6 +12,9 @@ open class EntityInsertStatement(
     isIgnore: Boolean = false
 ) : InsertStatement<Int>(table, isIgnore) {
 
+    /**
+     * 在新增时执行的操作，也就是把id赋值给Entity，以及默认值
+     */
     fun <E : Entity<E>> insert(entity: E): E {
         table.columns.forEach {
             val value = entity.toGet(it.name.underlineToCamelCase())

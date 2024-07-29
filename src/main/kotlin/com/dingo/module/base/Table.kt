@@ -5,16 +5,17 @@ package com.dingo.module.base
 import com.dingo.common.util.underlineToCamelCase
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.FieldSet
-import org.jetbrains.exposed.sql.Query
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.javatime.datetime
-import org.jetbrains.exposed.sql.selectAll
 import java.time.LocalDateTime
 import kotlin.reflect.KType
 import kotlin.reflect.jvm.jvmErasure
 
 
+/**
+ * 对exposed的Table进行扩展，假如一些类似于mybatis-plus的默认方法
+ */
 open abstract class Table<E : Entity<E>>(tableName: String) : LongIdTable(tableName), TypeReference {
     private val referencedKotlinType: KType by lazy { findSuperclassTypeArgument(javaClass.kotlin) }
 
@@ -22,14 +23,15 @@ open abstract class Table<E : Entity<E>>(tableName: String) : LongIdTable(tableN
         .where { id eq pid }
         .one()
 
+
     fun Query.one(): E? = firstOrNull()?.let {
-        mapResultToEntity(it)
+        it.toEntity()
     }
 
-    private fun mapResultToEntity(it: ResultRow): E {
+    fun ResultRow.toEntity(): E {
         val entity = createEntity()
         columns.forEach { column ->
-            val value = it[column]
+            val value = this[column]
             val fieldName = column.name.underlineToCamelCase()
             if (value is EntityID<*>) {
                 entity.toSet(fieldName, value.value)
@@ -40,7 +42,7 @@ open abstract class Table<E : Entity<E>>(tableName: String) : LongIdTable(tableN
         return entity
     }
 
-    fun Query.list(): List<E> = map { mapResultToEntity(it) }
+    fun Query.list(): List<E> = map { it.toEntity() }
 
     open fun insert(entity: E): E = EntityInsertStatement(this, false).insert(entity)
 
