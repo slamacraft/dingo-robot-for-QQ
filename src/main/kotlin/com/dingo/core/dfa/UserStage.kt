@@ -2,7 +2,7 @@ package com.dingo.core.dfa
 
 import com.dingo.RobotApplication
 import com.dingo.common.PackageScanner
-import com.dingo.enums.UserStageEnum
+import com.dingo.common.enums.UserStageEnum
 import net.mamoe.mirai.event.events.MessageEvent
 
 

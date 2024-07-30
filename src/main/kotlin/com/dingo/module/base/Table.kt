@@ -5,9 +5,11 @@ package com.dingo.module.base
 import com.dingo.common.util.underlineToCamelCase
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.FieldSet
+import org.jetbrains.exposed.sql.Query
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.javatime.datetime
+import org.jetbrains.exposed.sql.selectAll
 import java.time.LocalDateTime
 import kotlin.reflect.KType
 import kotlin.reflect.jvm.jvmErasure
@@ -23,10 +25,11 @@ open abstract class Table<E : Entity<E>>(tableName: String) : LongIdTable(tableN
         .where { id eq pid }
         .one()
 
-
     fun Query.one(): E? = firstOrNull()?.let {
         it.toEntity()
     }
+
+    fun Query.list(): List<E> = map { it.toEntity() }
 
     fun ResultRow.toEntity(): E {
         val entity = createEntity()
@@ -41,8 +44,6 @@ open abstract class Table<E : Entity<E>>(tableName: String) : LongIdTable(tableN
         }
         return entity
     }
-
-    fun Query.list(): List<E> = map { it.toEntity() }
 
     open fun insert(entity: E): E = EntityInsertStatement(this, false).insert(entity)
 

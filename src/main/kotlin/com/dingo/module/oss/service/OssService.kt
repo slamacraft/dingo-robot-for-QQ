@@ -2,8 +2,14 @@ package com.dingo.module.oss.service
 
 import com.dingo.common.util.MinioUtil
 import com.dingo.module.oss.entity.OssEntity
+import com.dingo.module.oss.entity.OssRefTable
 import com.dingo.module.oss.entity.OssTable
 import com.dingo.module.oss.entity.OssTable.getById
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.leftJoin
+import org.jetbrains.exposed.sql.or
+import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
@@ -17,6 +23,7 @@ open class OssService {
     @Transactional
     open fun upload(file: MultipartFile, bucketName: String): OssEntity {
         val fileUrl = MinioUtil.upload(file, bucketName)
+
         return OssTable.insert(OssEntity {
             name = file.originalFilename
             this.bucketName = bucketName

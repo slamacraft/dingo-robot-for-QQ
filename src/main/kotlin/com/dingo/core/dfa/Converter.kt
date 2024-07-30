@@ -1,7 +1,7 @@
 package com.dingo.core.dfa
 
 import com.dingo.core.mirai.MsgSender
-import com.dingo.enums.UserStageEnum
+import com.dingo.common.enums.UserStageEnum
 import net.mamoe.mirai.event.events.MessageEvent
 
 interface StageConverter {
