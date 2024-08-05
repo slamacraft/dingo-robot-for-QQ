@@ -2,7 +2,7 @@ package com.dingo.module.oss.model
 
 import com.dingo.module.oss.entity.OssRefEntity
 
-class OssRefModel {
+class OssRefVo {
     var id: Long = 0
     var businessId: Long = 0
     var ossId: Long = 0
@@ -11,20 +11,20 @@ class OssRefModel {
     var size: Long = 0
 
     companion object {
-        operator fun invoke(initFun: OssRefModel.() -> Unit): OssRefModel {
-            return OssRefModel().apply(initFun)
+        operator fun invoke(initFun: OssRefVo.() -> Unit): OssRefVo {
+            return OssRefVo().apply(initFun)
         }
     }
 }
 
-fun OssRefEntity.toModel(): OssRefModel {
+fun OssRefEntity.toModel(): OssRefVo {
     val entity = this
-    return OssRefModel {
+    return OssRefVo {
         id = entity.id
         businessId = entity.businessId
         ossId = entity.ossId
         name = entity.name
-        ossUrl = entity.ossUrl
+        ossUrl = entity.url
         size = entity.size
     }
 }

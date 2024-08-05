@@ -5,11 +5,9 @@ package com.dingo.module.base
 import com.dingo.common.util.underlineToCamelCase
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
-import org.jetbrains.exposed.sql.FieldSet
-import org.jetbrains.exposed.sql.Query
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.javatime.datetime
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.statements.BatchInsertStatement
 import java.time.LocalDateTime
 import kotlin.reflect.KType
 import kotlin.reflect.jvm.jvmErasure
@@ -23,18 +21,14 @@ open abstract class Table<E : Entity<E>>(tableName: String) : LongIdTable(tableN
 
     fun FieldSet.getById(pid: Long): E? = selectAll()
         .where { id eq pid }
-        .one()
+        .firstOrNull()?.let {
+            buildEntity(it)
+        }
 
-    fun Query.one(): E? = firstOrNull()?.let {
-        it.toEntity()
-    }
-
-    fun Query.list(): List<E> = map { it.toEntity() }
-
-    fun ResultRow.toEntity(): E {
+    fun buildEntity(resultRow: ResultRow): E {
         val entity = createEntity()
         columns.forEach { column ->
-            val value = this[column]
+            val value = resultRow[column]
             val fieldName = column.name.underlineToCamelCase()
             if (value is EntityID<*>) {
                 entity.toSet(fieldName, value.value)
@@ -47,8 +41,33 @@ open abstract class Table<E : Entity<E>>(tableName: String) : LongIdTable(tableN
 
     open fun insert(entity: E): E = EntityInsertStatement(this, false).insert(entity)
 
+    open fun batchInsert(entityList : List<E>){
+        batchInsert(entityList){ entity->
+            val row = this
+            columns.forEach { column->
+                entity.toGet(column.name.underlineToCamelCase())?.let {
+                    row[column] = it
+                }
+            }
+        }
+    }
+
+    open operator fun plusAssign(entity: E) {
+        insert(entity)
+    }
+
+    open operator fun plusAssign(entity: Collection<E>) {
+        EntityInsertStatement(this, false)
+    }
+
     private fun createEntity(): E = Entity.create(referencedKotlinType.jvmErasure) as E
+
+    private operator fun <T> BatchInsertStatement.set(it: Column<*>, value: T) {
+        this[it] = value
+    }
 }
+
+
 
 open abstract class BaseTable<E>(tableName: String) : Table<E>(tableName)
         where E : BaseEntity, E : Entity<E> {

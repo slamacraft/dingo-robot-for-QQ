@@ -2,14 +2,8 @@ package com.dingo.module.oss.service
 
 import com.dingo.common.util.MinioUtil
 import com.dingo.module.oss.entity.OssEntity
-import com.dingo.module.oss.entity.OssRefTable
 import com.dingo.module.oss.entity.OssTable
 import com.dingo.module.oss.entity.OssTable.getById
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.leftJoin
-import org.jetbrains.exposed.sql.or
-import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
@@ -35,7 +29,7 @@ open class OssService {
     open fun preview(ossId: Long): String {
         val ossEntity = get(ossId)
         // 获取一个有效时间为1天的链接
-        return MinioUtil.getUrl(ossEntity.bucketName, ossEntity.url) {
+        return MinioUtil.getUrl(ossEntity.bucketName, ossEntity.name) {
             expiry(1, TimeUnit.DAYS)
         }
     }

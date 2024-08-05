@@ -1,5 +1,9 @@
 package com.dingo.module.base
 
+import com.dingo.common.util.underlineToCamelCase
+import com.dingo.module.oss.entity.OssEntity.Companion.findSuperclassTypeArgument
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.sql.ResultRow
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.Proxy
@@ -34,6 +38,7 @@ open interface Entity<out E : Entity<E>> {
      * 设置属性的方法，也是给代理对象使用的
      */
     fun toSet(name: String, value: Any?)
+
 
     companion object {
         /**
