@@ -9,7 +9,6 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.javatime.datetime
-import org.jetbrains.exposed.sql.statements.BatchInsertStatement
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.statements.UpdateStatement
 import java.time.LocalDateTime
@@ -67,7 +66,7 @@ open abstract class Table<E : Entity<E>>(tableName: String) : LongIdTable(tableN
     }
 
     open fun updateById(entity: E) {
-        update({ id eq entity.id }) {
+        update({ id eq entity.id() }) {
             entity.fields().forEach { (column, value) ->
                 it.serValue(column, value)
             }
@@ -89,6 +88,7 @@ open abstract class Table<E : Entity<E>>(tableName: String) : LongIdTable(tableN
         return columns.associateWith { this[it.name.underlineToCamelCase()] }
     }
 
+    private fun <E : Entity<E>> E.id(): Long = this["id"] as Long
 
     open operator fun plusAssign(entity: E) {
         insert(entity)

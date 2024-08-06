@@ -33,6 +33,7 @@ interface IOssRefService : IBusinessService {
     fun listOssVo(businessId: Long): List<OssRefVo> = listOss(businessId).map { it.toModel() }
 
     fun addOss(businessId: Long, ossId: Long) {
+
         val ossEntity = OssTable.getById(ossId)
             ?.toRefEntity(businessId, businessType())
             ?.let { OssRefTable.insert(it) }
