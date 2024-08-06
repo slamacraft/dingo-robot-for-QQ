@@ -6,8 +6,12 @@ import com.dingo.common.util.underlineToCamelCase
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.javatime.datetime
 import org.jetbrains.exposed.sql.statements.BatchInsertStatement
+import org.jetbrains.exposed.sql.statements.InsertStatement
+import org.jetbrains.exposed.sql.statements.UpdateStatement
 import java.time.LocalDateTime
 import kotlin.reflect.KType
 import kotlin.reflect.jvm.jvmErasure
@@ -39,18 +43,52 @@ open abstract class Table<E : Entity<E>>(tableName: String) : LongIdTable(tableN
         return entity
     }
 
+    /**
+     * 批量新增
+     */
     open fun insert(entity: E): E = EntityInsertStatement(this, false).insert(entity)
 
-    open fun batchInsert(entityList : List<E>){
-        batchInsert(entityList){ entity->
+    /**
+     * 批量新增
+     */
+    open fun batchInsert(entityList: List<E>) {
+        batchInsert(entityList) { entity ->
             val row = this
-            columns.forEach { column->
+            columns.forEach { column ->
                 entity.toGet(column.name.underlineToCamelCase())?.let {
-                    row[column] = it
+                    row.serValue(column as Column<Any>, it)
                 }
             }
         }
     }
+
+    open fun batchUpdateById(entityList: List<E>) {
+        entityList.forEach(this::updateById)
+    }
+
+    open fun updateById(entity: E) {
+        update({ id eq entity.id }) {
+            entity.fields().forEach { (column, value) ->
+                it.serValue(column, value)
+            }
+        }
+    }
+
+    open fun removeById(id: Long) {
+        deleteWhere { this.id eq id }
+    }
+
+    open fun removeByIds(ids: Collection<Long>) {
+        if (ids.isEmpty()) {
+            return
+        }
+        deleteWhere { this.id inList ids }
+    }
+
+    private fun <E : Entity<E>> E.fields(): Map<Column<*>, Any?> {
+        return columns.associateWith { this[it.name.underlineToCamelCase()] }
+    }
+
 
     open operator fun plusAssign(entity: E) {
         insert(entity)
@@ -61,12 +99,7 @@ open abstract class Table<E : Entity<E>>(tableName: String) : LongIdTable(tableN
     }
 
     private fun createEntity(): E = Entity.create(referencedKotlinType.jvmErasure) as E
-
-    private operator fun <T> BatchInsertStatement.set(it: Column<*>, value: T) {
-        this[it] = value
-    }
 }
-
 
 
 open abstract class BaseTable<E>(tableName: String) : Table<E>(tableName)
@@ -83,4 +116,26 @@ open abstract class BaseTable<E>(tableName: String) : Table<E>(tableName)
 
     val updateTime = datetime("update_time")
         .default(LocalDateTime.now())
+}
+
+/**
+ * //////////////// 下面是一些为了抽象exposed接口的拓展函数 ////////////////
+ */
+
+/**
+ * 设置插入值
+ */
+private fun <T, E : Any> InsertStatement<E>.serValue(it: Column<*>, value: T?) {
+    if (value != null) {
+        this[it as Column<T>] = value
+    }
+}
+
+/**
+ * 设置插入值
+ */
+private fun <T> UpdateStatement.serValue(it: Column<*>, value: T?) {
+    if (value != null) {
+        this[it as Column<T>] = value
+    }
 }

@@ -29,15 +29,22 @@ open interface BaseEntity {
 
 open interface Entity<out E : Entity<E>> {
 
+    val id: Long
+        get() = this["id"] as Long
+
     /**
      * 获取属性的方法，给代理对象使用的
      */
     fun toGet(name: String): Any?
 
+    operator fun get(name: String): Any? = toGet(name)
+
     /**
      * 设置属性的方法，也是给代理对象使用的
      */
     fun toSet(name: String, value: Any?)
+
+    operator fun set(name: String, value: Any?) = toSet(name, value)
 
 
     companion object {
