@@ -1,4 +1,4 @@
-package com.dingo.module.punch.entity
+package com.dingo.module.entity.punch
 
 import com.dingo.module.base.BaseEntity
 import com.dingo.module.base.BaseTable

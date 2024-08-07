@@ -1,6 +1,7 @@
-package com.dingo.module.oss.model
+package com.dingo.module.model
 
-import com.dingo.module.oss.entity.OssRefEntity
+import com.dingo.module.entity.oss.OssRefEntity
+
 
 class OssRefVo {
     var id: Long = 0

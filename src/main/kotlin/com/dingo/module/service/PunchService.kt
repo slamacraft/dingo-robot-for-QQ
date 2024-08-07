@@ -1,10 +1,9 @@
-package com.dingo.module.punch.service
+package com.dingo.module.service
 
 
-import com.dingo.module.oss.entity.OssRefTable.id
-import com.dingo.module.oss.entity.OssRefTable.toEntity
-import com.dingo.module.punch.entity.PunchEntity
-import com.dingo.module.punch.entity.PunchTable
+import com.dingo.module.entity.oss.OssRefTable.id
+import com.dingo.module.entity.punch.PunchEntity
+import com.dingo.module.entity.punch.PunchTable
 import com.google.protobuf.ServiceException
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
@@ -41,7 +40,8 @@ open class PunchService {
         .where {
             PunchTable.userId eq userId and
                     PunchTable.complete.eq(false)
-        }.firstOrNull()
-        ?.toEntity() ?: throw ServiceException("请先开始打卡")
+        }.firstOrNull()?.let {
+            PunchTable.buildEntity(it)
+        } ?: throw ServiceException("请先开始打卡")
 
 }

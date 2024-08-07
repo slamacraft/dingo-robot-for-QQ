@@ -1,4 +1,4 @@
-package com.dingo.module.oss.entity
+package com.dingo.module.entity.oss
 
 import com.dingo.module.base.BaseEntity
 import com.dingo.module.base.BaseTable

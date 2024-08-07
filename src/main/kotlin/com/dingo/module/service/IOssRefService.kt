@@ -1,14 +1,14 @@
-package com.dingo.module.oss.service
+package com.dingo.module.service
 
 import com.dingo.common.enums.BusinessTypeEnum
 import com.dingo.common.interfaces.service.IBusinessService
-import com.dingo.module.oss.entity.OssEntity
-import com.dingo.module.oss.entity.OssRefEntity
-import com.dingo.module.oss.entity.OssRefTable
-import com.dingo.module.oss.entity.OssTable
-import com.dingo.module.oss.entity.OssTable.getById
-import com.dingo.module.oss.model.OssRefVo
-import com.dingo.module.oss.model.toModel
+import com.dingo.module.entity.oss.OssEntity
+import com.dingo.module.entity.oss.OssRefEntity
+import com.dingo.module.entity.oss.OssRefTable
+import com.dingo.module.entity.oss.OssTable
+import com.dingo.module.entity.oss.OssTable.getById
+import com.dingo.module.model.OssRefVo
+import com.dingo.module.model.toModel
 import com.google.protobuf.ServiceException
 import org.jetbrains.exposed.sql.selectAll
 
@@ -33,8 +33,7 @@ interface IOssRefService : IBusinessService {
     fun listOssVo(businessId: Long): List<OssRefVo> = listOss(businessId).map { it.toModel() }
 
     fun addOss(businessId: Long, ossId: Long) {
-
-        val ossEntity = OssTable.getById(ossId)
+        OssTable.getById(ossId)
             ?.toRefEntity(businessId, businessType())
             ?.let { OssRefTable.insert(it) }
             ?: throw ServiceException("oss不存在")
@@ -46,6 +45,14 @@ interface IOssRefService : IBusinessService {
             .map(OssTable::buildEntity)
             .map { it.toRefEntity(businessId, businessType()) }
             .let { OssRefTable.batchInsert(it) }
+    }
+
+    fun editOss(businessId: Long, ossIdList: List<Long>) {
+        val existOssRefList = OssRefTable.selectAll()
+            .where { OssTable.id eq businessId }
+            .map(OssRefTable::buildEntity)
+
+
     }
 }
 

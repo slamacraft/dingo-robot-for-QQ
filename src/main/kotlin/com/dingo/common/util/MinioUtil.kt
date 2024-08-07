@@ -2,10 +2,7 @@ package com.dingo.common.util
 
 import cn.hutool.core.net.URLDecoder
 import com.dingo.config.cfg.MinioCfg
-import io.minio.BucketExistsArgs
-import io.minio.GetPresignedObjectUrlArgs
-import io.minio.MakeBucketArgs
-import io.minio.PutObjectArgs
+import io.minio.*
 import io.minio.http.Method
 import org.springframework.web.multipart.MultipartFile
 import java.io.InputStream
@@ -107,6 +104,16 @@ object MinioUtil {
         return MinioCfg.client.bucketExists(
             BucketExistsArgs.builder()
                 .bucket(name)
+                .build()
+        )
+    }
+
+    fun removeObject(bucketName: String, fileName: String) {
+        MinioCfg.client.removeObject(
+            RemoveObjectArgs
+                .builder()
+                .bucket(bucketName)
+                .`object`(fileName)
                 .build()
         )
     }

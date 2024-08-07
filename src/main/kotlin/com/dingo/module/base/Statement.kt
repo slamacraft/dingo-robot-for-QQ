@@ -1,14 +1,11 @@
 package com.dingo.module.base
 
-import com.dingo.module.oss.entity.OssTable.id
+import com.dingo.module.entity.oss.OssTable.id
 import com.dingo.common.util.underlineToCamelCase
 import org.jetbrains.exposed.dao.id.LongIdTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.statements.BatchInsertStatement
 import org.jetbrains.exposed.sql.statements.InsertStatement
-import org.jetbrains.exposed.sql.statements.UpdateBuilder
-import org.jetbrains.exposed.sql.statements.UpdateStatement
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 
 

@@ -1,8 +1,7 @@
 package com.dingo.channel.controller
 
-import com.dingo.channel.model.OssAddReq
-import com.dingo.module.oss.entity.OssEntity
-import com.dingo.module.oss.service.OssService
+import com.dingo.module.entity.oss.OssEntity
+import com.dingo.module.service.OssService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile

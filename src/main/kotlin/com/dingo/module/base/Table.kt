@@ -22,11 +22,22 @@ import kotlin.reflect.jvm.jvmErasure
 open abstract class Table<E : Entity<E>>(tableName: String) : LongIdTable(tableName), TypeReference {
     private val referencedKotlinType: KType by lazy { findSuperclassTypeArgument(javaClass.kotlin) }
 
-    fun FieldSet.getById(pid: Long): E? = selectAll()
+    fun getById(pid: Long): E? = selectAll()
         .where { id eq pid }
         .firstOrNull()?.let {
             buildEntity(it)
         }
+
+    fun listByIds(ids: List<Long>): List<E> {
+        if (ids.isEmpty()) {
+            return emptyList()
+        }
+        return selectAll()
+            .where { id inList ids }
+            .map {
+                buildEntity(it)
+            }
+    }
 
     fun buildEntity(resultRow: ResultRow): E {
         val entity = createEntity()
