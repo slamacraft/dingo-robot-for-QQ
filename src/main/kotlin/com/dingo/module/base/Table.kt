@@ -62,6 +62,9 @@ open abstract class Table<E : Entity<E>>(tableName: String) : LongIdTable(tableN
      * 批量新增
      */
     open fun batchInsert(entityList: List<E>) {
+        if (entityList.isEmpty()) {
+            return
+        }
         batchInsert(entityList) { entity ->
             val row = this
             columns.forEach { column ->
