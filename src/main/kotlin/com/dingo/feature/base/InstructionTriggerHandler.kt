@@ -10,6 +10,8 @@ import com.dingo.core.dfa.StageConverter
  */
 object InstructionTriggerHandler : AbstractTriggerHandler() {
 
+    override val order: Int = 1
+
     /**
      * 所有的指令触发器
      */
@@ -19,7 +21,11 @@ object InstructionTriggerHandler : AbstractTriggerHandler() {
         .sortedBy { it.order }
 
     override fun handle(msg: String) {
-
+        triggers.first {
+            it.trigger.any { triggerMsg ->
+                msg.contains("@${triggerMsg}")
+            }
+        }?.let { it.handle(msg) }
     }
 
 }
