@@ -1,6 +1,6 @@
 package com.dingo.feature.base
 
-interface IMsgHandler {
+sealed interface IMsgHandler {
 
     /**
      * 处理收到的消息，然后返回下一个消息处理器，
