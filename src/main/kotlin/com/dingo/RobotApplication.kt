@@ -12,6 +12,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 open class RobotApplication
 
 fun main(args: Array<String>) {
+    "asdasd"
+    "asdasdadsad"
     val springApplication = SpringApplication(RobotApplication::class.java)
     springApplication.run(*args)
 }
