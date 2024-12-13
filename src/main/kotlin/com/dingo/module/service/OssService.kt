@@ -2,6 +2,7 @@ package com.dingo.module.service
 
 import com.dingo.common.util.MinioUtil
 import com.dingo.module.entity.oss.OssEntity
+import com.dingo.module.entity.oss.OssRefTable
 import com.dingo.module.entity.oss.OssTable
 import com.dingo.module.entity.oss.OssTable.getById
 import com.google.protobuf.ServiceException
@@ -18,6 +19,8 @@ open class OssService {
     @Transactional
     open fun upload(file: MultipartFile, bucketName: String): OssEntity {
         val fileUrl = MinioUtil.upload(file, bucketName)
+
+        OssRefTable.leftJoin(OssTable)
 
         return OssTable.insert(OssEntity {
             name = file.originalFilename
